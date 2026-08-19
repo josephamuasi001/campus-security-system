@@ -8,17 +8,18 @@ export async function registerUser({
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
+    options: {
+      data: {
+        full_name: fullName,
+      },
+    },
   });
 
   if (error) {
     throw error;
   }
 
-  return {
-    user: data.user,
-    session: data.session,
-    fullName,
-  };
+  return data;
 }
 
 export async function loginUser({
