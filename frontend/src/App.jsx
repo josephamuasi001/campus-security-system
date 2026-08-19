@@ -1,28 +1,42 @@
-import { useAuth } from "./context/AuthContext";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
+
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import RoleDashboard from "./pages/RoleDashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
-  const { user, profile, loading, logout } = useAuth();
-
-  if (loading) {
-    return <h1>Loading...</h1>;
-  }
-
-  if (!user) {
-    return <h1>No user logged in</h1>;
-  }
-
   return (
-    <div>
-      <h1>Welcome, {profile?.full_name}</h1>
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={<Navigate to="/dashboard" replace />}
+        />
 
-      <p>Email: {profile?.email}</p>
+        <Route
+          path="/login"
+          element={<Login />}
+        />
 
-      <p>Role: {profile?.role}</p>
+        <Route
+          path="/register"
+          element={<Register />}
+        />
 
-      <button onClick={logout}>
-        Logout
-      </button>
-    </div>
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/dashboard"
+            element={<RoleDashboard />}
+          />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
